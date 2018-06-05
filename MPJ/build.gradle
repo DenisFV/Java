@@ -1,0 +1,19 @@
+apply plugin: 'application'
+
+mainClassName = 'example.Main'
+
+def mpjHome = System.getenv('MPJ_HOME')
+def mpjStarter = files("$mpjHome/lib/starter.jar")
+def mpjJar = files("$mpjHome/lib/mpj.jar")
+def mpjClassPatch = sourceSets.main.runtimeClasspath - mpjJar
+
+dependencies {
+    compile mpjJar
+}
+
+run {
+    main = 'runtime.starter.MPJRun'
+    classpath = mpjStarter
+    args mainClassName, '-cp', mpjClassPatch.asPath, '-np', 4 // указать количетсво ядер
+    dependsOn classes
+}
